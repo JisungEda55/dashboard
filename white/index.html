@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Dashboard WH</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/YTq2tCG/iconx.webp">
+    <style>
+        @font-face {
+            font-family: 'MBC1961M';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/MBC1961M.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #B7E0FF;
+        }
+        .grid {
+            display: grid;
+            grid-template-areas: 
+                "a a j c d d"
+                "a a b c g g"
+                "h h f f g g"
+                "e k f f i x";
+            grid-template-rows: repeat(4, 240px); /* height */
+            grid-template-columns: repeat(6, 270px); /* width */
+            grid-gap: 10px;
+            width: auto;
+            height: auto;
+        }
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #006BFF;
+            color: #f2f2f7;
+            font-size: 2rem;
+            font-family: 'MBC1961M', Arial, sans-serif; 
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
+            overflow: hidden;
+        }
+        .box.a { grid-area: a; }
+        .box.b {
+            grid-area: b;
+            font-size: 82px; 
+            color: #FF2929;
+        }
+        .box.c { grid-area: c; }
+        .box.d {
+            grid-area: d;
+            font-size: 84px; 
+            text-align: center;
+        }
+        .box.e { grid-area: e; }
+        .box.f { grid-area: f; }
+        .box.g { grid-area: g; }
+        .box.h {
+            grid-area: h;
+            position: relative;
+            overflow: hidden;
+        }
+        .box.h span {
+            font-size: 84px;
+            font-weight: bold;
+        }
+        .box.i { grid-area: i; }
+        .box.j { grid-area: j; } 
+        .box.k { grid-area: k; } 
+        .box.x {
+            grid-area: x;
+            font-size: 30px; 
+            text-align: left;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.querySelector('.box.d').textContent = `대한민국${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateTime, 1000);
+        window.onload = updateTime;
+
+        function startCountdown() {
+            let countdown = 301; // SEC 단위
+            const boxB = document.querySelector('.box.b');
+
+            function updateCountdown() {
+                if (countdown > 0) {
+                    boxB.textContent = String(countdown).padStart(3, '0'); 
+                    countdown--;
+                } else {
+                    boxB.innerHTML = '<img src="https://em-content.zobj.net/source/skype/289/fireworks_1f386.png" alt="Fireworks" style="width: 100%; height: 100%; object-fit: contain;">';
+                }
+            }
+
+            setInterval(updateCountdown, 1000);
+            updateCountdown(); 
+        }
+
+        window.onload = function() {
+            updateTime();
+            startCountdown();
+
+            const tl = gsap.timeline({ repeat: -1 });
+            tl.to('.box.h span', { opacity: 1, y: 0, duration: 1 }) // 텍스트 나타남
+              .to('.box.h span', { opacity: 1, duration: 7 }) // 7초 멈춤
+              .to('.box.h span', { opacity: 0, y: 250, duration: 1 }) // 텍스트 아래로 사라짐
+              .to('.box.h span', { opacity: 0, y: -250, duration: 0 }) // 텍스트 초기 위치로
+              .to('.box.h span', { opacity: 1, y: 0, duration: 1 }); // 텍스트 다시 나타남
+        };
+    </script>
+</head>
+<body>
+    <div class="grid">
+        <div class="box a"><img src="https://ssl.pstatic.net/static/nng/glive/icon/category_poster_talk.png" alt="1Boo" style="width: 100%; height: 100%; object-fit: cover;"></div>
+        <div class="box b">b</div>
+        <div class="box c"><iframe src="https://chzzk-api.ddutto.com/chat/c68c3e1788d86ff11740edcd7040a8e8?setting=twitch:jisungeda05,kick:HaeSolEYo,font:Paperlogy-8ExtraBold,font-size:32px,text-color:ffffff,center,remove-anim2:6000,no-nick,no-color-hash,no-colon,no-badge" width="100%" height="100%" style="border: none;"></iframe></div>
+        <div class="box d">d</div>
+        <div class="box e"><img src="https://em-content.zobj.net/source/microsoft-teams/363/star_2b50.png" alt="Star Image" style="width: 55%; height: 55%; object-fit: contain;"></div>
+        <div class="box f"><img src="https://ssl.pstatic.net/static/nng/glive/icon/category_poster_various_games.png" alt="2Boo" style="width: 100%; height: 100%; object-fit: cover;"></div>
+        <div class="box g"><img src="https://ssl.pstatic.net/static/nng/glive/icon/category_poster_classic_game.png" alt="3Boo" style="width: 100%; height: 100%; object-fit: cover;"></div>
+        <div class="box h"><span>HaeSolEyo</span></div>
+        <div class="box i">
+            <iframe src="https://calendar.google.com/calendar/embed?src=kr.south_korea%23holiday%40group.v.calendar.google.com&ctz=Asia%2FSeoul" style="border: none; width: 100%; height: 100%;"></iframe>
+        </div>        
+        <div class="box j"><img src="https://em-content.zobj.net/source/microsoft-teams/363/rocket_1f680.png" alt="Rocket Image" style="width: 80%; height: 80%; object-fit: contain;"></div>
+        <div class="box k"><img src="https://em-content.zobj.net/source/microsoft-teams/363/grinning-face_1f600.png" alt="GrinningFace Image" style="width: 60%; height: 60%; object-fit: contain;"></div>
+        <div class="box x"> 
+            <blockquote> 
+            "미래를 예측하는 가장 좋은 방법은 미래를 창조하는 것이다." 
+            </blockquote> 
+        </div>        
+    </div>
+</body>
+</html>
