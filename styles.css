@@ -1,0 +1,87 @@
+@font-face {
+    font-family: 'MBC1961M';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/MBC1961M.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f6faf9;
+}
+
+.grid {
+    display: grid;
+    grid-template-areas: 
+        "a a j c d d"
+        "a a b c g g"
+        "h h f f g g"
+        "e k f f i x";
+    grid-template-rows: repeat(4, 240px); /* height */
+    grid-template-columns: repeat(6, 270px); /* width */
+    grid-gap: 10px;
+    width: auto;
+    height: auto;
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e9eceb;
+    color: #010101;
+    font-size: 2rem;
+    font-family: 'MBC1961M', Arial, sans-serif;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
+    overflow: hidden;
+} /* 숨기고 싶다면 display: none; 사용 */
+
+.box.a { grid-area: a; }
+
+.box.b {
+    grid-area: b;
+    font-size: 82px;
+    color: #ff0e0e;
+}
+
+.box.c { grid-area: c; }
+
+.box.d {
+    grid-area: d;
+    font-size: 84px;
+    text-align: center;
+}
+
+.box.e { grid-area: e; }
+
+.box.f { grid-area: f; }
+
+.box.g { grid-area: g; }
+
+.box.h {
+    grid-area: h;
+    position: relative;
+    overflow: hidden;
+}
+
+.box.h span {
+    font-size: 84px;
+    font-weight: bold;
+}
+
+.box.i { grid-area: i; }
+
+.box.j { grid-area: j; }
+
+.box.k { grid-area: k; }
+
+.box.x {
+    grid-area: x;
+    font-size: 30px;
+    text-align: left;
+}
