@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Dashboard</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/YTq2tCG/iconx.webp">
+    <style>
+        @font-face {
+            font-family: 'MBC1961M';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/MBC1961M.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'LINESeedKR-Bd';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f6faf9;
+        }
+        .grid {
+            display: grid;
+            grid-template-areas: 
+                "a a j c d d"
+                "a a b c g t"
+                "h h f f g t"
+                "e k f f x x";
+            grid-template-rows: repeat(4, 240px); /* height */
+            grid-template-columns: repeat(6, 270px); /* width */
+            grid-gap: 10px;
+            width: auto;
+            height: auto;
+            overflow: hidden;
+        }
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e9eceb;
+            color: #010101;
+            font-size: 2rem;
+            font-family: 'MBC1961M', Arial, sans-serif; 
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
+            overflow: hidden;
+            position: relative;
+        } 
+        .tagL {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .tagR {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .ClipL {
+            position: absolute;
+            top: 15px;
+            left: 12px;
+        }
+        .ClipName {
+            position: absolute;
+            bottom: 15px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.38);
+            color: white;
+            font-size: 1rem;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-family: 'LINESeedKR-Bd';
+            text-shadow: -0.7px -0.7px 0 black, 0.7px -0.7px 0 black, -0.7px 0.7px 0 black, 0.7px 0.7px 0 black;
+            filter: drop-shadow(0 0 1px black);
+        }
+        .ClipEditor {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0);
+            color: white;
+            font-size: 1rem;
+            padding: 4px 8px;
+            border-radius: 10px; 
+            font-family: 'LINESeedKR-Bd';
+            text-align: right;
+            text-shadow: -0.5px -0.5px 0 black, 0.5px -0.5px 0 black, -0.5px 0.5px 0 black, 0.5px 0.5px 0 black;
+            filter: drop-shadow(0 0 1px black);
+        }
+
+        .box.a { grid-area: a; }
+        .box.b {
+            grid-area: b;
+            font-size: 82px; 
+            color: #ff0e0e;
+        }
+        .box.c { grid-area: c; }
+        .box.d {
+            grid-area: d;
+            font-size: 84px; 
+            text-align: center;
+        }
+        .box.e { grid-area: e; }
+        .box.f { grid-area: f; }
+        .box.g { grid-area: g; }
+        .box.h {
+            grid-area: h;
+            position: relative;
+            overflow: hidden;
+        }
+        .box.h span {
+            font-size: 84px;
+            font-weight: bold;
+        }
+        .box.i { grid-area: i; 
+            display: none;
+        }
+        .box.j { grid-area: j; } 
+        .box.k { grid-area: k; } 
+        .box.x {
+            grid-area: x;
+            font-size: 30px; 
+            text-align: center;
+        }
+        .box.q { grid-area: q;
+            display: none; 
+        }
+        .box.u { grid-area: u; 
+            display: none;
+        }
+        .box.t { grid-area: t; 
+            position: relative;
+            overflow: hidden;
+            background-color: #080808;
+        }
+        .box.z { grid-area: z; 
+            display: none;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-item {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .quiz-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    .quiz-question {
+        font-size: 2rem;
+        margin: 0;
+        transition: transform 1s ease-out;
+    }
+    .quiz-choices {
+        margin-top: -10px;
+    }
+    .quiz-choice {
+        margin: 5px;
+        padding: 10px 20px;
+        font-size: 1.6rem;
+        background-color: #e9eceb;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .quiz-result {
+        font-size: 2.1rem;
+        color: green;
+        margin-top: -8px;
+    }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const videoContainer = document.querySelector(".video-container");
+            const clipName = document.querySelector(".ClipName");
+            const clipEditor = document.querySelector(".ClipEditor");
+
+            const videoData = [
+                { src: "https://b01-kr-naver-vod.pstatic.net/glive-clip/c/read/v2/VOD_ALPHA/glive-clip_2024_11_18_2/0473476a-a582-11ef-a16e-a0369ffac12c.mp4?_lsu_sa_=6c3531ff21d96f56bdd475556ff51cb38e333008340a0f0933e7e3c3b7143265152daa0f6cd50008a0b032629a3d6b40efe8b80eaa70d790ed82f73217acff3be9ae47ac8b25560a580293b77aedcd67", title: "✅: 마뫄1!", editor: "🤩 제작자1<br>🔥: 16" },
+                { src: "https://b01-kr-naver-vod.pstatic.net/glive-clip/c/read/v2/VOD_ALPHA/glive-clip_2024_09_18_1/1081961a-7586-11ef-9744-a0369ffac354.mp4?_lsu_sa_=6aa5c0f191606016cdd0b58c6de5d2b4cee3325843072f083dd706c0f70535f5ac201a626635960270d738a25d359b8994898b1938532cfb6e472e43f4509839e0fd49b67b32aad3f5c5dafab89fd1ce", title: "✨: 강지2!", editor: "😍 제작자2<br>🔥: 20" },
+                { src: "https://b01-kr-naver-vod.pstatic.net/glive-clip/c/read/v2/VOD_ALPHA/glive-clip_2024_11_02_1/3e3e4afe-9914-11ef-ba1e-80615f0c46d2.mp4?_lsu_sa_=63e5d9f941a16c4645da35ca67b5c2b3eeae3358f608ff84306712c5b7b939550d20cad96245680350cd35223039eb6cd58122657837ecd0b49bcf57a05498a593e8638db96c257726441deba2a84cec", title: "🔥: 마뫄3!", editor: "😎 제작자3<br>🔥: 25" },
+            ];
+
+            let currentIndex = 0;
+
+            // 동영상 동적 생성
+    videoData.forEach((data, index) => {
+        const video = document.createElement("video");
+        video.classList.add("video-item");
+        video.src = data.src;
+
+        if (index !== 0) {
+            video.style.display = "none";
+        } else {
+            video.autoplay = true; // 첫 번째 동영상 자동 재생
+            video.muted = true;   // 자동 재생 정책에 따라 음소거 설정
+            video.play();
+        }
+
+        video.addEventListener("ended", () => {
+            currentIndex = (currentIndex + 1) % videoData.length;
+            updateVideo(currentIndex);
+        });
+
+        videoContainer.appendChild(video);
+    });
+
+    function updateVideo(index) {
+    const videoElements = document.querySelectorAll(".video-item");
+
+    videoElements.forEach((video, i) => {
+        if (i === index) {
+            // 볼륨 설정
+            video.volume = 0.7;
+
+            // 새 동영상이 화면 아래에서 위로 올라옴
+            gsap.fromTo(
+                video,
+                { y: "100%", opacity: 0 },
+                { y: "0%", opacity: 1, duration: 1, display: "block" }
+            );
+            video.play();
+        } else {
+            // 현재 동영상이 위로 올라가며 사라짐
+            gsap.to(video, {
+                y: "-100%",
+                opacity: 0,
+                duration: 1,
+                onComplete: () => {
+                    video.style.display = "none";
+                },
+            });
+            video.pause();
+        }
+    });
+
+    // 제목과 제작자 정보 업데이트
+    clipName.innerHTML = videoData[index].title;
+    clipEditor.innerHTML = videoData[index].editor;
+}
+videoData.forEach((data, index) => {
+    const video = document.createElement("video");
+    video.classList.add("video-item");
+    video.src = data.src;
+
+    // 초기 볼륨 설정
+    video.volume = 0.7;
+
+    if (index !== 0) {
+        video.style.display = "none";
+    } else {
+        video.autoplay = true; // 첫 번째 동영상 자동 재생
+        video.play();          // 자동 재생
+    }
+
+    video.addEventListener("ended", () => {
+        currentIndex = (currentIndex + 1) % videoData.length;
+        updateVideo(currentIndex);
+    });
+
+    videoContainer.appendChild(video);
+});
+            // 초기 실행
+            updateVideo(currentIndex);
+
+            // 시간 업데이트 기능
+            function updateTime() {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                document.querySelector('.box.d').textContent = `대한민국 ${hours}:${minutes}:${seconds}`;
+            }
+            setInterval(updateTime, 1000);
+            updateTime();
+
+            // 카운트다운 기능
+            function startCountdown() {
+                let countdown = 185; // SEC 단위
+                const boxB = document.querySelector('.box.b');
+
+                function updateCountdown() {
+                    if (countdown > 0) {
+                        boxB.textContent = String(countdown).padStart(3, '0'); 
+                        countdown--;
+                    } else {
+                        boxB.innerHTML = '<img src="https://em-content.zobj.net/source/skype/289/fireworks_1f386.png" alt="Fireworks" style="width: 100%; height: 100%; object-fit: contain;">';
+                    }
+                }
+
+                setInterval(updateCountdown, 1000);
+                updateCountdown(); 
+            }
+            startCountdown();
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+    const quizQuestion = document.querySelector(".quiz-question");
+    const quizChoices = document.querySelector(".quiz-choices");
+    const quizResult = document.querySelector(".quiz-result");
+
+    // 문제를 중앙에서 상단으로 이동
+setTimeout(() => {
+    quizQuestion.style.transform = "translateY(-40px)"; // 문제를 위로 이동
+    setTimeout(() => {
+        quizChoices.style.display = "flex"; // 선택지 표시
+    }, 1500); // 문제 이동 후 1.5초 후 선택지 표시
+}, 5000); // 문제 중앙에 3초 동안 유지
+
+// 일정 시간이 지나면 정답 표시
+setTimeout(() => {
+    quizChoices.style.display = "none"; // 선택지 숨기기
+    quizResult.style.display = "block"; // 정답 표시
+}, 12000); // 선택지 표시 후 7초 뒤 정답 나타남
+});
+    </script>
+</head>
+<body>
+    <div class="grid">
+        <div class="box a">
+            <img src="https://ssl.pstatic.net/static/nng/glive/icon/category_poster_talk.png" alt="1Boo" style="width: 100%; height: 100%; object-fit: cover;">
+            <div class="tagR">Talk</div>
+        </div>
+        <div class="box b">b</div>
+        <div class="box c">
+            <iframe src="https://chzzk-api.ddutto.com/chat/c68c3e1788d86ff11740edcd7040a8e8?setting=twitch:jisungeda05,kick:HaeSolEYo,font:Paperlogy-8ExtraBold,font-size:32px,text-color:ffffff,center,remove-anim2:6000,no-nick,no-color-hash,no-colon,no-badge" width="100%" height="100%" style="border: none;"></iframe>
+        </div>
+        <div class="box d">d</div>
+        <div class="box e">
+            <img src="https://em-content.zobj.net/source/microsoft-teams/363/star_2b50.png" alt="Star Image" style="width: 55%; height: 55%; object-fit: contain;">
+        </div>
+        <div class="box f">
+            <img src="https://ssl.pstatic.net/static/nng/glive/icon/category_poster_various_games.png" alt="2Boo" style="width: 100%; height: 100%; object-fit: cover;">
+            <div class="tagL">Various Games</div>
+        </div>
+        <div class="box g">
+            <img src="https://ssl.pstatic.net/static/nng/glive/icon/category_poster_science_tech.png" alt="3Boo" style="width: 100%; height: 100%; object-fit: cover;">
+            <div class="tagR">Science Tech</div>
+        </div>
+        <div class="box h"><span>HaeSoleyo</span></div>
+        <div class="box i">
+            <iframe src="https://calendar.google.com/calendar/embed?src=kr.south_korea%23holiday%40group.v.calendar.google.com&ctz=Asia%2FSeoul" style="border: none; width: 100%; height: 100%;"></iframe>
+        </div>        
+        <div class="box j">
+            <img src="https://em-content.zobj.net/source/microsoft-teams/363/rocket_1f680.png" alt="Rocket Image" style="width: 80%; height: 80%; object-fit: contain;">
+        </div>
+        <div class="box k">
+            <img src="https://em-content.zobj.net/source/microsoft-teams/363/grinning-face_1f600.png" alt="Star Image" style="width: 55%; height: 55%; object-fit: contain;">
+        </div>
+        <div class="box x"> 
+            <blockquote> 
+            "미래를 예측하는 가장 좋은 방법은<br>미래를 창조하는 것이다."
+            </blockquote> 
+        </div>
+        <div class="box q">
+            <div class="quiz-container">
+                <p class="quiz-question">문제: 스트리머가 첫 방송을 시작한 해는?</p>
+                <div class="quiz-choices" style="display: none;">
+                    <div class="quiz-choice">1. 2018년</div>
+                    <div class="quiz-choice">2. 2024년</div>
+                    <div class="quiz-choice">3. 2020년</div>
+                </div>
+                <p class="quiz-result" style="display: none;">정답은 <strong>3</strong>번입니다!</p>
+            </div>
+        </div>
+        <div class="box u"> 
+            <h2>팬아트 갤러리</h2>
+            <p>팬아트는 'streamer_fanart_01.jpg'</p>
+        </div>
+        <div class="box t"> 
+            <div class="video-container"></div>
+            <div class="ClipL">
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                     width="74" height="auto" viewBox="0 0 406.000000 160.000000"
+                     preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,160.000000) scale(0.100000,-0.100000)"
+     fill="#ffffff" stroke="#000000" stroke-width="8">
+    <path d="M601 1570 c-274 -67 -501 -294 -577 -576 -26 -95 -26 -303 0 -394 80
+    -284 289 -492 571 -571 109 -31 285 -31 399 0 219 58 400 201 503 396 32 60
+    38 79 38 135 0 88 -34 147 -116 200 l-60 39 58 38 c159 106 161 256 3 454
+    -104 131 -263 236 -424 278 -104 27 -287 28 -395 1z m341 -121 c29 -6 95 -31
+    147 -56 79 -38 108 -59 175 -127 80 -80 146 -181 146 -224 0 -41 -22 -68 -94
+    -114 -40 -27 -76 -48 -80 -48 -4 0 -111 67 -239 149 -279 178 -269 173 -322
+    173 -52 1 -102 -26 -132 -72 -23 -32 -23 -38 -23 -330 0 -292 0 -298 23 -330
+    37 -55 71 -74 130 -74 51 0 61 5 301 159 137 88 253 161 257 163 12 5 137 -78
+    159 -105 11 -14 20 -37 20 -50 0 -87 -176 -289 -310 -356 -105 -52 -186 -71
+    -305 -71 -190 0 -330 58 -465 194 -142 142 -196 273 -194 475 1 148 28 241
+    104 357 89 136 235 242 390 282 66 18 238 20 312 5z m-42 -511 c115 -73 209
+    -135 209 -138 1 -12 -433 -280 -446 -276 -10 4 -13 59 -13 276 0 264 0 270 20
+    270 11 0 115 -60 230 -132z"/>
+    <path d="M2755 1288 c-3 -7 -4 -222 -3 -478 l3 -465 75 0 75 0 0 475 0 475
+    -73 3 c-52 2 -74 -1 -77 -10z"/>
+    <path d="M2180 1269 c-160 -21 -303 -125 -365 -264 -135 -301 42 -630 363
+    -677 154 -22 298 25 403 132 33 33 59 68 59 78 0 11 -23 29 -63 51 l-63 34
+    -55 -56 c-42 -42 -69 -59 -109 -71 -103 -31 -212 -14 -292 44 -47 34 -73 66
+    -100 127 -31 67 -31 198 -1 264 60 133 203 207 347 179 74 -14 136 -49 172
+    -95 14 -19 33 -35 41 -35 20 0 123 62 123 74 0 21 -56 88 -99 120 -113 82
+    -227 112 -361 95z"/>
+    <path d="M3072 1255 c-77 -65 -33 -175 68 -175 46 0 90 47 90 95 0 47 -13 71
+    -50 90 -42 22 -74 19 -108 -10z"/>
+    <path d="M3675 1011 c-55 -10 -106 -34 -129 -60 -26 -29 -34 -27 -38 12 l-3
+    32 -72 3 -73 3 0 -461 0 -460 75 0 75 0 0 167 0 166 23 -21 c12 -11 44 -31 70
+    -42 227 -100 477 92 454 347 -19 202 -196 347 -382 314z m131 -168 c104 -53
+    132 -203 57 -301 -46 -61 -154 -90 -230 -61 -99 37 -151 173 -104 274 48 104
+    171 143 277 88z"/>
+    <path d="M3060 670 l0 -331 73 3 72 3 0 325 0 325 -72 3 -73 3 0 -331z"/>
+  </g>
+                </svg>
+            </div>
+            <div class="ClipName">제목이 표시됩니다</div>
+            <div class="ClipEditor">제작자</div>
+        </div>        
+        <div class="box z"> 
+            <h2>타임라인</h2>
+            <p>곧 있을 이벤트: '크리스마스 특별 방송!'</p>
+        </div>
+    </div>
+</body>
+</html>
