@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grid Dashboard</title>
     <link rel="icon" type="image/png" href="https://i.ibb.co/YTq2tCG/iconx.webp">
+    <!-- a 카테고리1 b 타이머 c 채팅 d 표준시 e 별 f 카테고리2 g 카테고리3 h 해솔이오 i 달력 j 로켓 k 웃는 얼굴 x 명언 q 문제 u 팬아트 t 클립 z 타임라인 -->
     <style>
         @font-face {
             font-family: 'MBC1961M';
             src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/MBC1961M.woff2') format('woff2');
             font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'LINESeedKR-Bd';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
+            font-weight: 700;
             font-style: normal;
         }
         body {
@@ -20,12 +27,12 @@
             margin: 0;
             background-color: #f6faf9;
         }
-        .grid {
+        .grid { 
             display: grid;
             grid-template-areas: 
                 "a a j c d d"
-                "a a b c g g"
-                "h h f f g g"
+                "a a b c g t"
+                "h h f f g t"
                 "e k f f x x";
             grid-template-rows: repeat(4, 240px); /* height */
             grid-template-columns: repeat(6, 270px); /* width */
@@ -67,17 +74,39 @@
             padding: 5px 10px;
             border-radius: 5px;
         }
-        .tagAD {
+        .ClipL {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: #010101; /* 빨간색 배경 */
-            color: #f7f7f7; /* 검은색 텍스트 */
-            font-size: 1rem;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-weight: bold;
+            top: 15px;
+            left: 12px;
         }
+        .ClipName {
+            position: absolute;
+            bottom: 15px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.38);
+            color: white;
+            font-size: 1rem;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-family: 'LINESeedKR-Bd';
+            text-shadow: -0.7px -0.7px 0 black, 0.7px -0.7px 0 black, -0.7px 0.7px 0 black, 0.7px 0.7px 0 black;
+            filter: drop-shadow(0 0 1px black);
+        }
+        .ClipEditor {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0);
+            color: white;
+            font-size: 1rem;
+            padding: 4px 8px;
+            border-radius: 10px; 
+            font-family: 'LINESeedKR-Bd';
+            text-align: right;
+            text-shadow: -0.5px -0.5px 0 black, 0.5px -0.5px 0 black, -0.5px 0.5px 0 black, 0.5px 0.5px 0 black;
+            filter: drop-shadow(0 0 1px black);
+        }
+
         .box.a { grid-area: a; }
         .box.b {
             grid-area: b;
@@ -112,40 +141,241 @@
             font-size: 30px; 
             text-align: center;
         }
+        .box.q { grid-area: q;
+            display: none; 
+        }
+        .box.u { grid-area: u; 
+            display: none;
+        }
+        .box.t { grid-area: t; 
+            position: relative;
+            overflow: hidden;
+            background-color: #080808;
+            
+        }
+        .box.z { grid-area: z; 
+            display: none;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-item {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .quiz-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    .quiz-question {
+        font-size: 2rem;
+        margin: 0;
+        transition: transform 1s ease-out;
+    }
+    .quiz-choices {
+        margin-top: -10px;
+    }
+    .quiz-choice {
+        margin: 5px;
+        padding: 10px 20px;
+        font-size: 1.6rem;
+        background-color: #e9eceb;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .quiz-result {
+        font-size: 2.1rem;
+        color: green;
+        margin-top: -8px;
+    }
+
+    .unmute-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #fc3c1c;
+        color: #000000;
+        border: none;
+        padding: 20px 30px;
+        font-size: 32px;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        font-family: 'LINESeedKR-Bd';
+    }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
-        function updateTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            document.querySelector('.box.d').textContent = `대한민국${hours}:${minutes}:${seconds}`;
+        document.addEventListener("DOMContentLoaded", () => {
+            const videoContainer = document.querySelector(".video-container");
+            const clipName = document.querySelector(".ClipName");
+            const clipEditor = document.querySelector(".ClipEditor");
+
+            const videoData = [
+                { src: "https://b01-kr-naver-vod.pstatic.net/glive-clip/c/read/v2/VOD_ALPHA/glive-clip_2024_11_02_1/3e3e4afe-9914-11ef-ba1e-80615f0c46d2.mp4?_lsu_sa_=65454efaf1a960b69adeb54c6725f3bd1e0d36682b096fbf3e6740cbd71a37b5ea2b5a9c62955d00b06e309241373b827c3bb42e283ff61ab7a6263abaa94a41e156049e040943970074669d77a2262f", title: "✅: 이런내용이 공개가 되었나?!", editor: "🤩 클립제작자<br>🔥: 15" },
+                { src: "https://b01-kr-naver-vod.pstatic.net/glive-clip/c/read/v2/VOD_ALPHA/glive-clip_2024_09_07_3/362d92e0-6cc8-11ef-83d5-a0369ffabd00.mp4?_lsu_sa_=6675aef2e1cb6c3641dcd5fb6be562ba7e4330e88d03ff9034b7c2cd37723a35bc202a5867458a0500ab3482cb36eb50b257d045d76a8bf61e9993ebd30355311ea90d02511f59f9fdde96a6b3a81179", title: "✨: 1년 잠만자고 사범대 가는법", editor: "😍 마뫄<br>🔥: 35" },
+                { src: "https://b01-kr-naver-vod.pstatic.net/glive-clip/c/read/v2/VOD_ALPHA/glive-clip_2024_11_12_1/e41fd100-a0e5-11ef-bde7-80615f0bcc8a.mp4?_lsu_sa_=6d1504f6311a69d6b9d3c50c65e59cb6ee773258370ccf0b3aa76cc377723d65542f2a3461750f03a06437a27d306b57ad0b7ba397546c3a293a23ff70b409a75379d3d069681cfe375afd39622a60da", title: "🔥: 마뫄3!", editor: "😍 클립제작자<br>🔥: 25" },
+            ];
+
+            let currentIndex = 0;
+
+            // 동영상 동적 생성
+    videoData.forEach((data, index) => {
+        const video = document.createElement("video");
+        video.classList.add("video-item");
+        video.src = data.src;
+
+        if (index !== 0) {
+            video.style.display = "none";
+        } else {
+            video.autoplay = true; // 첫 번째 동영상 자동 재생
+            video.muted = true;   // 자동 재생 정책에 따라 음소거 설정
+            video.play();
         }
-        setInterval(updateTime, 1000);
-        window.onload = updateTime;
 
-        function startCountdown() {
-            let countdown = 185; // SEC 단위
-            const boxB = document.querySelector('.box.b');
+        video.addEventListener("ended", () => {
+            currentIndex = (currentIndex + 1) % videoData.length;
+            updateVideo(currentIndex);
+        });
 
-            function updateCountdown() {
-                if (countdown > 0) {
-                    boxB.textContent = String(countdown).padStart(3, '0'); 
-                    countdown--;
-                } else {
-                    boxB.innerHTML = '<img src="https://em-content.zobj.net/source/skype/289/fireworks_1f386.png" alt="Fireworks" style="width: 100%; height: 100%; object-fit: contain;">';
-                }
+        videoContainer.appendChild(video);
+    });
+
+    function updateVideo(index) {
+    const videoElements = document.querySelectorAll(".video-item");
+
+    videoElements.forEach((video, i) => {
+        if (i === index) {
+            // 볼륨 설정
+            video.volume = 0.33;
+
+            // 새 동영상이 화면 아래에서 위로 올라옴
+            gsap.fromTo(
+                video,
+                { y: "100%", opacity: 0 },
+                { y: "0%", opacity: 1, duration: 1, display: "block" }
+            );
+            video.play();
+        } else {
+            // 현재 동영상이 위로 올라가며 사라짐
+            gsap.to(video, {
+                y: "-100%",
+                opacity: 0,
+                duration: 1,
+                onComplete: () => {
+                    video.style.display = "none";
+                },
+            });
+            video.pause();
+        }
+    });
+
+    // 제목과 제작자 정보 업데이트
+    clipName.innerHTML = videoData[index].title;
+    clipEditor.innerHTML = videoData[index].editor;
+}
+videoData.forEach((data, index) => {
+    const video = document.createElement("video");
+    video.classList.add("video-item");
+    video.src = data.src;
+
+    // 초기 볼륨 설정
+    video.volume = 0.7;
+
+    if (index !== 0) {
+        video.style.display = "none";
+    } else {
+        video.autoplay = true; // 첫 번째 동영상 자동 재생
+        video.play();          // 자동 재생
+    }
+
+    video.addEventListener("ended", () => {
+        currentIndex = (currentIndex + 1) % videoData.length;
+        updateVideo(currentIndex);
+    });
+
+    videoContainer.appendChild(video);
+});
+            // 초기 실행
+            updateVideo(currentIndex);
+
+            // 시간 업데이트 기능
+            function updateTime() {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                document.querySelector('.box.d').textContent = `대한민국 ${hours}:${minutes}:${seconds}`;
             }
-
-            setInterval(updateCountdown, 1000);
-            updateCountdown(); 
-        }
-
-        window.onload = function() {
+            setInterval(updateTime, 1000);
             updateTime();
+
+            // 카운트다운 기능
+            function startCountdown() {
+                let countdown = 185; // SEC 단위
+                const boxB = document.querySelector('.box.b');
+
+                function updateCountdown() {
+                    if (countdown > 0) {
+                        boxB.textContent = String(countdown).padStart(3, '0'); 
+                        countdown--;
+                    } else {
+                        boxB.innerHTML = '<img src="https://em-content.zobj.net/source/skype/289/fireworks_1f386.png" alt="Fireworks" style="width: 100%; height: 100%; object-fit: contain;">';
+                    }
+                }
+
+                setInterval(updateCountdown, 1000);
+                updateCountdown(); 
+            }
             startCountdown();
-        };
+
+            // UnMute 버튼 추가 및 기능
+            const unmuteButton = document.createElement('button');
+            unmuteButton.classList.add('unmute-button');
+            unmuteButton.textContent = 'UnMute';
+            document.body.appendChild(unmuteButton);
+
+            unmuteButton.addEventListener('click', () => {
+                const videos = document.querySelectorAll('.video-item');
+                videos.forEach(video => {
+                    video.muted = false;
+                });
+                unmuteButton.style.display = 'none';
+            });
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+    const quizQuestion = document.querySelector(".quiz-question");
+    const quizChoices = document.querySelector(".quiz-choices");
+    const quizResult = document.querySelector(".quiz-result");
+
+    // 문제를 중앙에서 상단으로 이동
+setTimeout(() => {
+    quizQuestion.style.transform = "translateY(-40px)"; // 문제를 위로 이동
+    setTimeout(() => {
+        quizChoices.style.display = "flex"; // 선택지 표시
+    }, 1500); // 문제 이동 후 1.5초 후 선택지 표시
+}, 5000); // 문제 중앙에 3초 동안 유지
+
+// 일정 시간이 지나면 정답 표시
+setTimeout(() => {
+    quizChoices.style.display = "none"; // 선택지 숨기기
+    quizResult.style.display = "block"; // 정답 표시
+}, 12000); // 선택지 표시 후 7초 뒤 정답 나타남
+});
     </script>
 </head>
 <body>
@@ -178,13 +408,75 @@
             <img src="https://em-content.zobj.net/source/microsoft-teams/363/rocket_1f680.png" alt="Rocket Image" style="width: 80%; height: 80%; object-fit: contain;">
         </div>
         <div class="box k">
-            <img src="https://em-content.zobj.net/source/microsoft-teams/363/grinning-face_1f600.png" alt="GrinningFace Image" style="width: 60%; height: 60%; object-fit: contain;">
+            <img src="https://em-content.zobj.net/source/microsoft-teams/363/grinning-face_1f600.png" alt="Star Image" style="width: 55%; height: 55%; object-fit: contain;">
         </div>
         <div class="box x"> 
             <blockquote> 
             "미래를 예측하는 가장 좋은 방법은<br>미래를 창조하는 것이다."
             </blockquote> 
+        </div>
+        <div class="box q">
+            <div class="quiz-container">
+                <p class="quiz-question">문제: 스트리머가 첫 방송을 시작한 해는?</p>
+                <div class="quiz-choices" style="display: none;">
+                    <div class="quiz-choice">1. 2018년</div>
+                    <div class="quiz-choice">2. 2024년</div>
+                    <div class="quiz-choice">3. 2020년</div>
+                </div>
+                <p class="quiz-result" style="display: none;">정답은 <strong>3</strong>번입니다!</p>
+            </div>
+        </div>
+        <div class="box u"> 
+            <h2>팬아트 갤러리</h2>
+            <p>팬아트는 'streamer_fanart_01.jpg'</p>
+        </div>
+        <div class="box t"> 
+            <div class="video-container"></div>
+            <div class="ClipL">
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                     width="74" height="auto" viewBox="0 0 406.000000 160.000000"
+                     preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,160.000000) scale(0.100000,-0.100000)"
+     fill="#ffffff" stroke="#000000" stroke-width="8">
+    <path d="M601 1570 c-274 -67 -501 -294 -577 -576 -26 -95 -26 -303 0 -394 80
+    -284 289 -492 571 -571 109 -31 285 -31 399 0 219 58 400 201 503 396 32 60
+    38 79 38 135 0 88 -34 147 -116 200 l-60 39 58 38 c159 106 161 256 3 454
+    -104 131 -263 236 -424 278 -104 27 -287 28 -395 1z m341 -121 c29 -6 95 -31
+    147 -56 79 -38 108 -59 175 -127 80 -80 146 -181 146 -224 0 -41 -22 -68 -94
+    -114 -40 -27 -76 -48 -80 -48 -4 0 -111 67 -239 149 -279 178 -269 173 -322
+    173 -52 1 -102 -26 -132 -72 -23 -32 -23 -38 -23 -330 0 -292 0 -298 23 -330
+    37 -55 71 -74 130 -74 51 0 61 5 301 159 137 88 253 161 257 163 12 5 137 -78
+    159 -105 11 -14 20 -37 20 -50 0 -87 -176 -289 -310 -356 -105 -52 -186 -71
+    -305 -71 -190 0 -330 58 -465 194 -142 142 -196 273 -194 475 1 148 28 241
+    104 357 89 136 235 242 390 282 66 18 238 20 312 5z m-42 -511 c115 -73 209
+    -135 209 -138 1 -12 -433 -280 -446 -276 -10 4 -13 59 -13 276 0 264 0 270 20
+    270 11 0 115 -60 230 -132z"/>
+    <path d="M2755 1288 c-3 -7 -4 -222 -3 -478 l3 -465 75 0 75 0 0 475 0 475
+    -73 3 c-52 2 -74 -1 -77 -10z"/>
+    <path d="M2180 1269 c-160 -21 -303 -125 -365 -264 -135 -301 42 -630 363
+    -677 154 -22 298 25 403 132 33 33 59 68 59 78 0 11 -23 29 -63 51 l-63 34
+    -55 -56 c-42 -42 -69 -59 -109 -71 -103 -31 -212 -14 -292 44 -47 34 -73 66
+    -100 127 -31 67 -31 198 -1 264 60 133 203 207 347 179 74 -14 136 -49 172
+    -95 14 -19 33 -35 41 -35 20 0 123 62 123 74 0 21 -56 88 -99 120 -113 82
+    -227 112 -361 95z"/>
+    <path d="M3072 1255 c-77 -65 -33 -175 68 -175 46 0 90 47 90 95 0 47 -13 71
+    -50 90 -42 22 -74 19 -108 -10z"/>
+    <path d="M3675 1011 c-55 -10 -106 -34 -129 -60 -26 -29 -34 -27 -38 12 l-3
+    32 -72 3 -73 3 0 -461 0 -460 75 0 75 0 0 167 0 166 23 -21 c12 -11 44 -31 70
+    -42 227 -100 477 92 454 347 -19 202 -196 347 -382 314z m131 -168 c104 -53
+    132 -203 57 -301 -46 -61 -154 -90 -230 -61 -99 37 -151 173 -104 274 48 104
+    171 143 277 88z"/>
+    <path d="M3060 670 l0 -331 73 3 72 3 0 325 0 325 -72 3 -73 3 0 -331z"/>
+  </g>
+                </svg>
+            </div>
+            <div class="ClipName">제목이 표시됩니다</div>
+            <div class="ClipEditor">제작자</div>
         </div>        
+        <div class="box z"> 
+            <h2>타임라인</h2>
+            <p>곧 있을 이벤트: '크리스마스 특별 방송!'</p>
+        </div>
     </div>
 </body>
 </html>
