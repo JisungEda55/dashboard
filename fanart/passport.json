@@ -1,0 +1,25 @@
+{
+  "images": [
+    {
+      "id": 1,
+      "url": "https://www.apple.com/v/apple-watch-ultra-2/f/images/overview/hiking/hiking_waypoint__3fgjh67boxu2_large.jpg",
+      "title": "Emergency by Google",
+      "description": "Emergency services via SATellite",
+      "category": "Google"
+    },
+    {
+      "id": 2,
+      "url": "https://www.apple.com/v/apple-watch-ultra-2/f/images/overview/hiking/hiking_compass__cxdj89qd34uq_large.jpg",
+      "title": "두 번째 이미지",
+      "description": "이 이미지는 두 번째 사진입니다.",
+      "category": "city"
+    },
+    {
+      "id": 3,
+      "url": "https://www.apple.com/v/apple-watch-ultra-2/f/images/overview/hiking/hiking_hike__d9ngwt8t3kya_large.jpg",
+      "title": "세 번째 이미지",
+      "description": "이 이미지는 세 번째 사진입니다.",
+      "category": "abstract"
+    }
+  ]
+}
