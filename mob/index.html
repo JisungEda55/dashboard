@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Grid Dashboard</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/YTq2tCG/iconx.webp">
+    <style>
+        @font-face {
+            font-family: 'MBC1961M';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/MBC1961M.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'LINESeedKR-Bd';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f6faf9;
+            font-family: 'LINESeedKR-Bd', sans-serif;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+        .container {
+            width: 100%;
+            max-width: 1800px;
+            padding: 10px;
+        }
+        .grid { 
+            display: grid;
+            grid-template-areas: 
+                "a a j c d d"
+                "a a b g g t"
+                "h h f f u t"
+                "e k f f x x";
+            grid-template-rows: repeat(4, 240px);
+            grid-template-columns: repeat(6, 270px);
+            grid-gap: 10px;
+            width: auto;
+            height: auto;
+            overflow: hidden;
+        }
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e9eceb;
+            color: #010101;
+            font-size: 2rem;
+            font-family: 'MBC1961M', Arial, sans-serif; 
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .tagL {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .tagR {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .ClipL {
+            position: absolute;
+            top: 15px;
+            left: 12px;
+        }
+        .ClipName {
+            position: absolute;
+            bottom: 15px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.38);
+            color: white;
+            font-size: 1rem;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-family: 'LINESeedKR-Bd';
+            text-shadow: -0.7px -0.7px 0 black, 0.7px -0.7px 0 black, -0.7px 0.7px 0 black, 0.7px 0.7px 0 black;
+            filter: drop-shadow(0 0 1px black);
+        }
+        .ClipEditor {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0);
+            color: white;
+            font-size: 1rem;
+            padding: 4px 8px;
+            border-radius: 10px; 
+            font-family: 'LINESeedKR-Bd';
+            text-align: right;
+            text-shadow: -0.5px -0.5px 0 black, 0.5px -0.5px 0 black, -0.5px 0.5px 0 black, 0.5px 0.5px 0 black;
+            filter: drop-shadow(0 0 1px black);
+        }
+
+        .box.a { grid-area: a; }
+        .box.b {
+            grid-area: b;
+            font-size: 82px; 
+            color: #ff0e0e;
+        }
+        .box.c { grid-area: c; }
+        .box.d {
+            grid-area: d;
+            font-size: 84px; 
+            text-align: center;
+        }
+        .box.e { grid-area: e; }
+        .box.f { grid-area: f; }
+        .box.g { grid-area: g; }
+        .box.h {
+            grid-area: h;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+        }
+        .box.h span {
+            font-size: 84px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .box.i { grid-area: i; display: none; }
+        .box.j { grid-area: j; } 
+        .box.k { grid-area: k; } 
+        .box.x {
+            grid-area: x;
+            font-size: 30px; 
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .box.q { grid-area: q; display: none; }
+        .box.u {
+            grid-area: u;
+            position: relative;
+            overflow: hidden;
+            background-color: #080808;
+            color: white;
+        }
+        .box.t { 
+            grid-area: t; 
+            position: relative;
+            overflow: hidden;
+            background-color: #080808;
+        }
+        .box.z { grid-area: z; display: none; }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .video-item {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        .fade-out {
+            opacity: 1;
+            animation: fadeOut 1s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Mobile Layout (2x4 grid) */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+                background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            }
+            .grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: repeat(4, 1fr);
+                grid-template-areas: 
+                    "a a"
+                    "b c"
+                    "d t"
+                    "u f";
+                grid-gap: 8px;
+                height: 100vh;
+                max-height: 100vh;
+            }
+            .box {
+                min-height: 0;
+                font-size: 1.5rem;
+            }
+            .box.h, .box.e, .box.g, .box.j, .box.k, .box.x {
+                display: none;
+            }
+            .box.h span {
+                font-size: 2.5rem;
+            }
+            .box.b {
+                font-size: 3rem;
+            }
+            .box.d {
+                font-size: 1.8rem;
+                padding: 10px;
+            }
+            .box.c iframe {
+                height: 100%;
+            }
+            .box.u .ArtName,
+            .box.t .ClipName {
+                font-size: 0.8rem;
+                bottom: 10px;
+            }
+        }
+
+        /* Tablet Layout */
+        @media (min-width: 769px) and (max-width: 1200px) {
+            .grid {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(5, 200px);
+                grid-template-areas: 
+                    "a a j c"
+                    "a a b d"
+                    "h h f f"
+                    "g g u t"
+                    "e k x x";
+            }
+            .box {
+                font-size: 1.8rem;
+            }
+            .box.h span {
+                font-size: 3.5rem;
+            }
+        }
+
+        /* Mobile orientation adjustment */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .grid {
+                grid-template-rows: repeat(4, 1fr);
+            }
+        }
+        @media (max-width: 768px) and (orientation: landscape) {
+            .grid {
+                grid-template-rows: repeat(4, 1fr);
+            }
+        }
+
+        /* Header for mobile */
+        .mobile-header {
+            display: none;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 2rem;
+            color: #2575fc;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            .mobile-header {
+                display: block;
+            }
+        }
+
+        /* Unmute button */
+        .unmute-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #fc3c1c;
+            color: #000000;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            font-family: 'LINESeedKR-Bd';
+        }
+        @media (max-width: 768px) {
+            .unmute-button {
+                padding: 10px 15px;
+                font-size: 1rem;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+
+        /* Info panel for mobile */
+        .mobile-info {
+            display: none;
+            text-align: center;
+            padding: 15px;
+            background: #e9eceb;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+        @media (max-width: 768px) {
+            .mobile-info {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mobile-header">HaeSoleyo Dashboard</div>
+        <div class="grid">
+            <div class="box a">
+                <img src="https://ssl.pstatic.net/static/nng/glive/icon/category_poster_talk.png" alt="1Boo" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="tagR">Talk</div>
+            </div>
+            <div class="box b">185</div>
+            <div class="box c">
+                <iframe src="https://chzzk-api.ddutto.com/chat/c68c3e1788d86ff11740edcd7040a8e8?setting=twitch:jisungeda05,kick:HaeSolEYo,font:Paperlogy-8ExtraBold,font-size:32px,text-color:ffffff,center,remove-anim2:6000,no-nick,no-color-hash,no-colon,no-badge" 
+                width="100%" height="100%" style="border: none;"></iframe>
+            </div>
+            <div class="box d">대한민국 00:00:00</div>
+            <div class="box e">
+                <img src="https://em-content.zobj.net/source/microsoft-teams/363/star_2b50.png" alt="Star Image" style="width: 55%; height: 55%; object-fit: contain;">
+            </div>
+            <div class="box f">
+                <img src="https://ssl.pstatic.net/static/nng/glive/icon/category_poster_various_games.png" alt="2Boo" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="tagL">Various Games</div>
+            </div>
+            <div class="box g">
+                <img src="https://ssl.pstatic.net/static/nng/glive/icon/category_poster_science_tech.png" alt="3Boo" style="width: 100%; height: 100%; object-fit: cover;">
+                <div class="tagR">Science Tech</div>
+            </div>
+            <div class="box h"><span>HaeSoleyo</span></div>
+            <div class="box i">
+                <iframe src="https://calendar.google.com/calendar/embed?src=kr.south_korea%23holiday%40group.v.calendar.google.com&ctz=Asia%2FSeoul" style="border: none; width: 100%; height: 100%;"></iframe>
+            </div>
+            <div class="box j">
+                <img src="https://em-content.zobj.net/source/microsoft-teams/363/rocket_1f680.png" alt="Rocket Image" style="width: 80%; height: 80%; object-fit: contain;">
+            </div>
+            <div class="box k">
+                <img src="https://em-content.zobj.net/source/microsoft-teams/363/grinning-face_1f600.png" alt="Smile Image" style="width: 55%; height: 55%; object-fit: contain;">
+            </div>
+            <div class="box x">
+                <blockquote>
+                    "미래를 예측하는 가장 좋은 방법은<br>미래를 창조하는 것이다."
+                </blockquote>
+            </div>
+            <div class="box u">
+                <div class="fanart-viewer">
+                    <img id="fanart-image" src="https://i.ibb.co/3vW4B1y/placeholder-art.webp" alt="Fan Art" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="ArtName">팬아트 갤러리</div>
+                    <div class="ArtCreator">JSON 기반 갤러리</div>
+                </div>
+            </div>
+            <div class="box t"> 
+                <div class="video-container">
+                    <video class="video-item" autoplay muted loop>
+                        <source src="https://assets.codepen.io/3364143/screen.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="ClipName">클립: 방송 하이라이트</div>
+                <div class="ClipEditor">제작자: 해솔이오</div>
+            </div>
+        </div>
+        <div class="mobile-info">
+            모바일에서 보기 최적화된 2×4 그리드 레이아웃
+        </div>
+    </div>
+    
+    <button class="unmute-button">UnMute</button>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Update time
+            function updateTime() {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                document.querySelector('.box.d').textContent = `대한민국 ${hours}:${minutes}:${seconds}`;
+            }
+            setInterval(updateTime, 1000);
+            updateTime();
+            
+            // Countdown timer
+            function startCountdown() {
+                let countdown = 185;
+                const boxB = document.querySelector('.box.b');
+                
+                function updateCountdown() {
+                    if (countdown > 0) {
+                        boxB.textContent = String(countdown).padStart(3, '0'); 
+                        countdown--;
+                    } else {
+                        boxB.innerHTML = '<img src="https://em-content.zobj.net/source/skype/289/fireworks_1f386.png" alt="Fireworks" style="width: 100%; height: 100%; object-fit: contain;">';
+                    }
+                }
+                
+                setInterval(updateCountdown, 1000);
+                updateCountdown(); 
+            }
+            startCountdown();
+            
+            // Unmute button functionality
+            const unmuteButton = document.querySelector('.unmute-button');
+            const video = document.querySelector('.video-item');
+            
+            unmuteButton.addEventListener('click', () => {
+                video.muted = false;
+                unmuteButton.style.display = 'none';
+            });
+            
+            // Mobile orientation detection
+            function handleOrientation() {
+                if (window.matchMedia("(max-width: 768px)").matches) {
+                    const grid = document.querySelector('.grid');
+                    if (window.innerHeight > window.innerWidth) {
+                        // Portrait
+                        grid.style.gridTemplateRows = "repeat(4, 1fr)";
+                    } else {
+                        // Landscape
+                        grid.style.gridTemplateRows = "repeat(4, 1fr)";
+                    }
+                }
+            }
+            
+            // Initial orientation check
+            handleOrientation();
+            
+            // Listen for orientation changes
+            window.addEventListener('resize', handleOrientation);
+            window.addEventListener('orientationchange', handleOrientation);
+            
+            // Fanart rotation (simulated)
+            const fanartImages = [
+                "https://i.ibb.co/3vW4B1y/placeholder-art.webp",
+                "https://i.ibb.co/0n4Gk4D/placeholder-art2.webp",
+                "https://i.ibb.co/1M0r8D0/placeholder-art3.webp"
+            ];
+            let currentFanart = 0;
+            
+            setInterval(() => {
+                const fanartImg = document.getElementById('fanart-image');
+                fanartImg.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    currentFanart = (currentFanart + 1) % fanartImages.length;
+                    fanartImg.src = fanartImages[currentFanart];
+                    fanartImg.classList.remove('fade-out');
+                    fanartImg.classList.add('fade-in');
+                    
+                    setTimeout(() => {
+                        fanartImg.classList.remove('fade-in');
+                    }, 1000);
+                }, 500);
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
