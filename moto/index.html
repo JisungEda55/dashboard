@@ -3,124 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web-Based Car Systems</title>
+    <title>Android Auto Web Interface</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            background-color: #000;
-            color: white;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            overflow: hidden; /* 스크롤 방지 */
-            height: 100vh;
-        }
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .active-glow {
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-        }
+        body { background-color: #000; color: white; font-family: sans-serif; margin: 0; overflow: hidden; height: 100vh; }
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        /* 전체화면 시 브라우저 기본 스크롤바 숨기기 */
+        :-webkit-full-screen { width: 100%; height: 100%; }
     </style>
 </head>
 <body>
 
-    <div class="flex h-screen w-screen p-4 gap-4">
+    <div id="app-container" class="flex h-screen w-screen p-4 gap-4 bg-black">
         
         <nav class="w-20 glass rounded-3xl flex flex-col items-center py-6 justify-between">
             <div class="space-y-8 flex flex-col items-center">
-                <button onclick="changeApp('home')" class="hover:scale-110 transition-transform text-2xl text-blue-400">
-                    <i class="fas fa-th-large"></i>
-                </button>
-                <button onclick="changeApp('map')" class="hover:scale-110 transition-transform text-2xl text-gray-400">
-                    <i class="fas fa-location-arrow"></i>
-                </button>
-                <button onclick="changeApp('music')" class="hover:scale-110 transition-transform text-2xl text-gray-400">
-                    <i class="fas fa-music"></i>
-                </button>
-                <button onclick="changeApp('phone')" class="hover:scale-110 transition-transform text-2xl text-gray-400">
-                    <i class="fas fa-phone"></i>
-                </button>
+                <button class="text-2xl text-blue-400"><i class="fas fa-th-large"></i></button>
+                <button class="text-2xl text-gray-400"><i class="fas fa-location-arrow"></i></button>
+                <button class="text-2xl text-gray-400"><i class="fas fa-music"></i></button>
             </div>
             
-            <div class="text-center">
-                <div id="clock" class="text-sm font-bold mb-2">12:00</div>
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-gray-700 to-gray-500 flex items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-all">
-                    <div class="w-4 h-4 rounded-full border-2 border-white"></div>
+            <div class="flex flex-col items-center gap-6">
+                <button onclick="toggleFullScreen()" class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <i id="fullscreen-icon" class="fas fa-expand text-lg text-white"></i>
+                </button>
+
+                <div class="text-center">
+                    <div id="clock" class="text-sm font-bold mb-2">12:00</div>
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-gray-700 to-gray-500 flex items-center justify-center cursor-pointer shadow-lg active:scale-90 transition-all">
+                        <div class="w-5 h-5 rounded-full border-2 border-white"></div>
+                    </div>
                 </div>
             </div>
         </nav>
 
-        <main id="main-app" class="flex-[2] glass rounded-3xl relative overflow-hidden group">
-            <img src="https://images.unsplash.com/photo-1526725359915-d256ab4d41d6?auto=format&fit=crop&q=80&w=2000" 
-                 class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-duration-500" alt="Map">
-            
-            <div class="absolute top-6 left-6 p-5 glass rounded-2xl flex items-center gap-4 active-glow animate-pulse">
-                <div class="bg-blue-600 p-3 rounded-xl">
-                    <i class="fas fa-arrow-up-right-dots text-2xl"></i>
-                </div>
+        <main class="flex-[2] glass rounded-3xl relative overflow-hidden group">
+            <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&q=80&w=2000" 
+                 class="absolute inset-0 w-full h-full object-cover opacity-60" alt="Map">
+            <div class="absolute top-6 left-6 p-5 glass rounded-2xl flex items-center gap-4">
+                <div class="bg-green-600 p-3 rounded-xl"><i class="fas fa-turn-up text-2xl rotate-90"></i></div>
                 <div>
-                    <p class="text-xs text-gray-300">잠시 후 우회전</p>
-                    <p class="text-xl font-bold">강남대로 영동대교 방면</p>
+                    <p class="text-xs text-gray-300">300m 앞</p>
+                    <p class="text-xl font-bold">목적지 도착 예정</p>
                 </div>
             </div>
         </main>
 
         <aside class="flex-1 flex flex-col gap-4">
-            <div class="flex-1 glass rounded-3xl p-6 flex flex-col justify-center items-center text-center">
-                <img id="album-art" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=300" 
-                     class="w-32 h-32 rounded-2xl shadow-2xl mb-4 rotate-3" alt="Album Art">
-                <h3 class="text-xl font-bold">Stay With Me</h3>
-                <p class="text-gray-400 text-sm mb-6">Miki Matsubara</p>
-                
-                <div class="flex items-center gap-8 text-2xl">
-                    <i class="fas fa-backward cursor-pointer hover:text-blue-400"></i>
-                    <i id="play-btn" class="fas fa-play cursor-pointer text-4xl hover:scale-110 transition-transform"></i>
-                    <i class="fas fa-forward cursor-pointer hover:text-blue-400"></i>
+            <div class="flex-1 glass rounded-3xl p-6 flex flex-col justify-center items-center">
+                <div class="w-32 h-32 bg-gray-700 rounded-2xl mb-4 flex items-center justify-center">
+                    <i class="fas fa-compact-disc fa-spin text-5xl text-gray-500"></i>
                 </div>
+                <h3 class="text-lg font-bold">재생 중인 곡 없음</h3>
+                <p class="text-gray-400 text-sm">연결을 확인하세요</p>
             </div>
-
             <div class="h-1/3 glass rounded-3xl p-6 flex items-center justify-around">
                 <div class="text-center">
-                    <i class="fas fa-sun text-yellow-400 text-3xl mb-2"></i>
-                    <p class="text-sm font-medium">24°C</p>
+                    <i class="fas fa-cloud-sun text-orange-400 text-3xl mb-1"></i>
+                    <p class="text-xs">맑음 22°</p>
                 </div>
-                <div class="h-10 w-[1px] bg-gray-700"></div>
                 <div class="text-center">
-                    <i class="fas fa-battery-three-quarters text-green-400 text-3xl mb-2"></i>
-                    <p class="text-sm font-medium">78%</p>
+                    <i class="fas fa-tachometer-alt text-blue-400 text-3xl mb-1"></i>
+                    <p class="text-xs">0 km/h</p>
                 </div>
             </div>
         </aside>
-
     </div>
 
     <script>
-        // 1. 시계 기능 구현
+        // 시계 업데이트
         function updateClock() {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+            document.getElementById('clock').textContent = 
+                String(now.getHours()).padStart(2, '0') + ":" + 
+                String(now.getMinutes()).padStart(2, '0');
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 2. 간단한 앱 전환 로직 (콘솔 확인용)
-        function changeApp(appName) {
-            console.log(`Switching to: ${appName}`);
-            // 실제 구현 시에는 이 부분에서 main-app의 innerHTML을 변경하거나
-            // Iframe 소스를 변경하여 다른 페이지를 보여줄 수 있습니다.
+        // 전체 화면 토글 함수
+        function toggleFullScreen() {
+            const doc = document.documentElement; // 페이지 전체
+            const icon = document.getElementById('fullscreen-icon');
+
+            if (!document.fullscreenElement) {
+                // 전체 화면 요청
+                doc.requestFullscreen().then(() => {
+                    icon.classList.replace('fa-expand', 'fa-compress');
+                }).catch(err => {
+                    alert(`전체 화면 전환 실패: ${err.message}`);
+                });
+            } else {
+                // 전체 화면 해제
+                document.exitFullscreen().then(() => {
+                    icon.classList.replace('fa-compress', 'fa-expand');
+                });
+            }
         }
 
-        // 3. 재생 버튼 토글
-        const playBtn = document.getElementById('play-btn');
-        let isPlaying = false;
-        playBtn.addEventListener('click', () => {
-            isPlaying = !isPlaying;
-            playBtn.className = isPlaying ? "fas fa-pause cursor-pointer text-4xl" : "fas fa-play cursor-pointer text-4xl";
+        // 사용자가 ESC 키로 전체화면을 나갔을 때 아이콘 상태 동기화
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.getElementById('fullscreen-icon');
+            if (!document.fullscreenElement) {
+                icon.classList.replace('fa-compress', 'fa-expand');
+            }
         });
     </script>
 </body>
