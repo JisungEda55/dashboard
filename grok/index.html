@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>통합 대시보드 - JisungEda55</title>
+  
+  <!-- MBC1961M 폰트 (원본 그대로 유지) -->
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/MBC1961M.woff2" crossorigin="anonymous">
+  
+  <!-- GSAP (텍스트 애니메이션용 - box h에서 사용 중이라면 필요) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  
+  <style>
+    :root {
+      /* 공통 기본값 (white/light 테마 기준) */
+      --bg-body: #f6faf9;
+      --bg-box: #e9eceb;
+      --text-primary: #010101;
+      --text-accent: #ff0e0e;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --radius: 12px;
+    }
+
+    body.theme-dark {
+      --bg-body: #0d1117;
+      --bg-box: #161b22;
+      --text-primary: #c9d1d9;
+      --text-accent: #ff6b6b;
+      --shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    body.theme-yellow {
+      --bg-body: #fffdf0;
+      --bg-box: #fff9c4;
+      --text-primary: #3c2f00;
+      --text-accent: #f57f17;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    body.theme-darkapple {
+      --bg-body: #1c2526;
+      --bg-box: rgba(30,35,38,0.92);
+      --text-primary: #f5f5f7;
+      --text-accent: #64d2ff;
+      --radius: 18px;           /* 애플 스타일 둥근 모서리 */
+      --shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      background: var(--bg-body);
+      color: var(--text-primary);
+      font-family: 'MBC1961M', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background 0.4s ease;
+    }
+
+    .theme-switcher {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 100;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .theme-switcher button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+      background: rgba(120,120,120,0.15);
+      color: var(--text-primary);
+      backdrop-filter: blur(6px);
+      transition: all 0.2s;
+    }
+
+    .theme-switcher button:hover {
+      background: rgba(140,140,140,0.3);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-areas: 
+        "a a j c d d"
+        "a a b c g g"
+        "h h f f g g"
+        "e k f f i x";
+      grid-template-rows: repeat(4, 240px);
+      grid-template-columns: repeat(6, 270px);
+      gap: 12px;
+      max-width: 100%;
+      width: fit-content;
+    }
+
+    .box {
+      background: var(--bg-box);
+      color: var(--text-primary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .box.b { grid-area: b; font-size: 82px; color: var(--text-accent); }
+    .box.d { grid-area: d; font-size: 84px; text-align: center; }
+    .box.h { grid-area: h; position: relative; font-size: 84px; font-weight: bold; }
+    .box.x { grid-area: x; font-size: 30px; text-align: left; padding: 16px; }
+
+    /* 나머지 영역 기본 스타일 */
+    .box.a { grid-area: a; }
+    .box.c { grid-area: c; }
+    .box.e { grid-area: e; }
+    .box.f { grid-area: f; }
+    .box.g { grid-area: g; }
+    .box.i { grid-area: i; }
+    .box.j { grid-area: j; }
+    .box.k { grid-area: k; }
+
+    @media (max-width: 1400px) {
+      .grid { grid-template-columns: repeat(4, 1fr); grid-template-rows: auto; gap: 10px; }
+      /* 모바일/축소 시 간단 재배치 예시 - 필요하면 더 세밀하게 조정하세요 */
+    }
+  </style>
+</head>
+<body class="theme-dark">  <!-- 기본 테마: dark로 시작 (원하시는 테마로 변경 가능) -->
+
+  <!-- 테마 선택 버튼들 -->
+  <div class="theme-switcher">
+    <button data-theme="light">Light</button>
+    <button data-theme="dark">Dark</button>
+    <button data-theme="yellow">Yellow</button>
+    <button data-theme="darkapple">Dark Apple</button>
+  </div>
+
+  <div class="grid">
+    <div class="box a">A 영역</div>
+    <div class="box b" id="countdown">300</div>
+    <div class="box c">C (채팅 iframe 등)</div>
+    <div class="box d" id="clock">00:00:00</div>
+    <div class="box e">E</div>
+    <div class="box f">F</div>
+    <div class="box g">G</div>
+    <div class="box h"><span id="gsap-text">H 애니메이션</span></div>
+    <div class="box i">I (YouTube 등)</div>
+    <div class="box j">J</div>
+    <div class="box k">K</div>
+    <div class="box x">X 영역</div>
+  </div>
+
+  <script>
+    // 테마 변경 기능
+    document.querySelectorAll('.theme-switcher button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const theme = btn.dataset.theme;
+        document.body.className = `theme-${theme}`;
+        localStorage.setItem('dashboard-theme', theme);
+      });
+    });
+
+    // 저장된 테마 불러오기 (없으면 dark 기본)
+    const savedTheme = localStorage.getItem('dashboard-theme') || 'dark';
+    document.body.className = `theme-${savedTheme}`;
+
+    // ── 실시간 시계 (원본 기능 유지) ──
+    function updateClock() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'Asia/Seoul'
+      });
+      document.getElementById('clock').textContent = timeString;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ── 300초 카운트다운 예시 (원본 기능 유지) ──
+    let timeLeft = 300;
+    const countdownEl = document.getElementById('countdown');
+    const cdInterval = setInterval(() => {
+      if (timeLeft <= 0) {
+        countdownEl.textContent = "🎆";
+        clearInterval(cdInterval);
+        return;
+      }
+      countdownEl.textContent = timeLeft;
+      timeLeft--;
+    }, 1000);
+
+    // ── GSAP 간단 예시 (box h 텍스트 애니메이션) ──
+    gsap.from("#gsap-text", { 
+      y: 40, 
+      opacity: 0, 
+      duration: 1.2, 
+      ease: "power3.out" 
+    });
+  </script>
+</body>
+</html>
